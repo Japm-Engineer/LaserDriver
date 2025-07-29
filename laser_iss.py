@@ -2,6 +2,7 @@ import serial, time, csv, os
 import numpy as np
 import argparse
 
+groundpath = '/home/pi/Documents/LAS/'
 parser = argparse.ArgumentParser(description='Laser Driver controller')
 parser.add_argument('-p', '--power',nargs='?',const=0.5, type = float,default=0.5)      # option that takes a value
 # parser.add_argument('-i','--ip',nargs='?', const='192.168.31.121', type = str, default='192.168.31.121')
@@ -30,7 +31,6 @@ if (ibias != 0 ):
     support = 0
     pref = 0
 
-
 def wait_until(timeout, period=0.25, *args, **kwargs):
   mustend = time.time() + timeout
   while time.time() < mustend:
@@ -42,9 +42,9 @@ serial_laser = serial.Serial(port=adr, baudrate=115200, timeout=0)
 cmd_turn = 'turn 1\n'
 serial_laser.write(cmd_turn.encode())
 
-if (time.strftime("%Y%m%d") in os.listdir()) == False:
-    os.mkdir(time.strftime("%Y%m%d"))
-path = time.strftime("%Y%m%d")+ '/'
+# if (time.strftime("%Y%m%d") in os.listdir()) == False:
+#     os.mkdir(time.strftime("%Y%m%d"))
+# path = time.strftime("%Y%m%d")+ '/'
 
 # setting commands
 cmd_pref = f'ref {pref:0.2f}\n'
@@ -73,7 +73,7 @@ time.sleep(3)
 
 serial_laser.write(cmd_start.encode())
 
-filename =path +time.strftime("%H%M%S") + f'_LaserV{version:d}_kp{kp:0.2f}_ti{Ti:0.2f}_s{support:d}_bias{ibias:0.2f}_p{pref:0.2f}'+'.csv'
+filename =groundpath +time.strftime("%H%M%S") + f'_LaserV{version:d}_kp{kp:0.2f}_ti{Ti:0.2f}_s{support:d}_bias{ibias:0.2f}_p{pref:0.2f}'+'.csv'
 with open(filename, 'w') as f:
     print(filename)
     Flag = wait_until(5)
@@ -86,7 +86,7 @@ with open(filename, 'w') as f:
             try:
                 rawString = rawString.decode('ascii')
                 f.write(rawString)
-                print(rawString)
+                # print(rawString)
             except:
                 print('error')
         Flag = wait_until(5)
