@@ -42,6 +42,9 @@ serial_laser = serial.Serial(port=adr, baudrate=115200, timeout=0)
 cmd_turn = 'turn 1\n'
 serial_laser.write(cmd_turn.encode())
 
+if ('LAS' in os.listdir(r'/home/pi/Documents/')) == False:
+  os.mkdir('LAS')
+
 # if (time.strftime("%Y%m%d") in os.listdir()) == False:
 #     os.mkdir(time.strftime("%Y%m%d"))
 # path = time.strftime("%Y%m%d")+ '/'
